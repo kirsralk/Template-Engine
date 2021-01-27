@@ -23,8 +23,14 @@ const promptUser = () =>
         message: 'This is a test prompt'
     },
 
-
-    ]);
+    ]).then((answers) => {
+        if (answers.test == 0) {
+            console.log("this worked")
+        }
+        else {
+            return
+        }
+    });
 
 promptUser()
     // .then(console.log(answers));
