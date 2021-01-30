@@ -18,9 +18,25 @@ const render = require("./lib/htmlRenderer");
 const promptUser = () =>
     inquirer.prompt([
     {
+        type: 'list',
+        name: 'memberOneType',
+        message: 'Select a job description for this team member:',
+        choices: ['Employee','Engineer','Intern','Manager'],
+    },
+    {
         type: 'input',
-        name: 'test',
-        message: 'This is a test prompt'
+        name: 'memberOneName',
+        message: "Enter this team member's name:",
+    },
+    {
+        type: 'input',
+        name: 'memberOneEmail',
+        message: "Enter this team member's email:",
+    },
+    {
+        type: 'input',
+        name: 'memberOneGit',
+        message: "Enter this team member's GitHub username:",
     },
 
     ]).then((answers) => {
