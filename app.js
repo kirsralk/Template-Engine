@@ -60,7 +60,7 @@ const promptUser = () =>
 
     ])  .then((answers) => {
         if (answers.ID == "0") {
-            console.log("inputs captured");
+            console.log("inputs captured" + JSON.stringify(answers));
         }
         else {
             return
