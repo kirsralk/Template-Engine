@@ -4,60 +4,76 @@ const Intern = require("./lib/Intern");
 const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
+const util = require("util");
 
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
+
+const writeFileAsync = util.promisify(fs.writeFile);
 
 const render = require("./lib/htmlRenderer");
 
 
 // Empty array where employee objects will populate
-const employeeArr = [];
+const employees = [];
 
 // Inquirer prompt to collect user input
 const promptUser = () =>
     inquirer.prompt([
     {
         type: 'input',
-        name: 'memberOneName',
+        name: 'name',
         message: "Enter this team member's name:",
     },
     {
         type: 'number',
-        name: 'ID',
+        name: 'id',
         message: "Enter this team member's ID:",
     },
     {
         type: 'input',
-        name: 'memberOneEmail',
+        name: 'email',
         message: "Enter this team member's email:",
     },
     {
         type: 'list',
-        name: 'memberOneType',
+        name: 'type',
         message: 'Select a job description for this team member:',
-        choices: ['Employee','Engineer','Intern','Manager'],
+        choices: ['Engineer','Intern','Manager'],
     },
         {
             type: 'input',
-            name: 'memberOneGit',
+            name: 'github',
             message: "Enter this team member's GitHub username:",
-            when: (answers) => answers.memberOneType === "Engineer"
+            when: (answers) => answers.type === "Engineer"
         },
         {
             type: 'input',
-            name: 'memberOneSchool',
+            name: 'school',
             message: "Enter this team member's school name:",
-            when: (answers) => answers.memberOneType === "Intern"
+            when: (answers) => answers.type === "Intern"
         },
         {
             type: 'input',
-            name: 'memberOneOffice',
+            name: 'officeNumber',
             message: "Enter this team member's office number:",
-            when: (answers) => answers.memberOneType === "Manager"
+            when: (answers) => answers.type === "Manager"
         },
 
-    ])  .then((answers) => render(answers));
+    ])  
+
+    .then((answers) => {
+        if (answers.type === "Engineer") {
+            employees.push(new Engineer(answers.name.toUpperCase(), answers.id, answers.email, answers.github))
+        } else if (answers.type === "Intern") {
+            employees.push(new Intern(answers.name.toUpperCase(), answers.id, answers.email, answers.school))
+        } else {
+            employees.push(new Manager(answers.name.toUpperCase(), answers.id, answers.email, answers.officeNumber))
+        }
+            fs.appendFile(outputPath,render(employees),(err) =>
+            err ? console.log(err) : console.log("This line ran at 74"));
+    });
+    // .then((answers) => render(answers));
             
 
         // if (answers.ID == "0") {
@@ -69,24 +85,16 @@ const promptUser = () =>
     // });
 
 promptUser();
+
+
+    // .then((employees) => fs.writeFileSync('team.html', render(employees), "utf8")); 
+//     .then((employees) => {
+//         // fs.mkdirSync(OUTPUT_DIR)
+//         fs.appendFile(outputPath, render(employees), "utf8")
+// }); 
     // .then(answers => render());
     // .then(console.log(answers));
 
-// After the user has input all employees desired, call the `render` function (required
-// above) and pass in an array containing all employee objects; the `render` function will
-// generate and return a block of HTML including templated divs for each employee!
-
-
-// After you have your html, you're now ready to create an HTML file using the HTML
-// returned from the `render` function. Now write it to a file named `team.html` in the
-// `output` folder. You can use the variable `outputPath` above target this location.
-// Hint: you may need to check if the `output` folder exists and create it if it
-// does not.
 
 
 
-// HINT: make sure to build out your classes first! Remember that your Manager, Engineer,
-// and Intern classes should all extend from a class named Employee; see the directions
-// for further information. Be sure to test out each class and verify it generates an
-// object with the correct structure and methods. This structure will be crucial in order
-// for the provided `render` function to work! ```
