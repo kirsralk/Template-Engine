@@ -56,7 +56,11 @@ const promptUser = () =>
             message: "Enter this team member's office number:",
             when: (answers) => answers.type === "Manager"
         },
-
+    {
+        type: 'confirm',
+        name: 'addAnother',
+        message: 'Would you like to add another employee?'
+    }
     ])  
 
     .then((answers) => {
@@ -67,8 +71,13 @@ const promptUser = () =>
         } else {
             employees.push(new Manager(answers.name, answers.id, answers.email, answers.officeNumber))
         }
+
+        if (answers.addAnother === true){
+            promptUser();
+        } else {
             fs.appendFile(outputPath, render(employees), (err) =>
-            err ? console.log(err) : console.log("Team member added!"));
+            err ? console.log(err) : console.log("Team member(s) added!"));
+        }
     });
 
 
