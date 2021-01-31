@@ -17,16 +17,16 @@ const render = require("./lib/htmlRenderer");
 
 const promptUser = () =>
     inquirer.prompt([
-    {
-        type: 'list',
-        name: 'memberOneType',
-        message: 'Select a job description for this team member:',
-        choices: ['Employee','Engineer','Intern','Manager'],
-    },
+
     {
         type: 'input',
         name: 'memberOneName',
         message: "Enter this team member's name:",
+    },
+    {
+        type: 'number',
+        name: 'ID',
+        message: "Enter this team member's ID:",
     },
     {
         type: 'input',
@@ -34,14 +34,33 @@ const promptUser = () =>
         message: "Enter this team member's email:",
     },
     {
-        type: 'input',
-        name: 'memberOneGit',
-        message: "Enter this team member's GitHub username:",
+        type: 'list',
+        name: 'memberOneType',
+        message: 'Select a job description for this team member:',
+        choices: ['Employee','Engineer','Intern','Manager'],
     },
+        {
+            type: 'input',
+            name: 'memberOneGit',
+            message: "Enter this team member's GitHub username:",
+            when: (answers) => answers.memberOneType === "Engineer"
+        },
+        {
+            type: 'input',
+            name: 'memberOneSchool',
+            message: "Enter this team member's school name:",
+            when: (answers) => answers.memberOneType === "Intern"
+        },
+        {
+            type: 'input',
+            name: 'memberOneOffice',
+            message: "Enter this team member's office number:",
+            when: (answers) => answers.memberOneType === "Manager"
+        },
 
-    ]).then((answers) => {
-        if (answers.test == 0) {
-            console.log("this worked")
+    ])  .then((answers) => {
+        if (answers.ID == "0") {
+            console.log("inputs captured");
         }
         else {
             return
