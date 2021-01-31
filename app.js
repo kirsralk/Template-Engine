@@ -4,12 +4,9 @@ const Intern = require("./lib/Intern");
 const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
-const util = require("util");
 
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
-
-const writeFileAsync = util.promisify(fs.writeFile);
 
 const render = require("./lib/htmlRenderer");
 
@@ -64,37 +61,18 @@ const promptUser = () =>
 
     .then((answers) => {
         if (answers.type === "Engineer") {
-            employees.push(new Engineer(answers.name.toUpperCase(), answers.id, answers.email, answers.github))
+            employees.push(new Engineer(answers.name, answers.id, answers.email, answers.github))
         } else if (answers.type === "Intern") {
-            employees.push(new Intern(answers.name.toUpperCase(), answers.id, answers.email, answers.school))
+            employees.push(new Intern(answers.name, answers.id, answers.email, answers.school))
         } else {
-            employees.push(new Manager(answers.name.toUpperCase(), answers.id, answers.email, answers.officeNumber))
+            employees.push(new Manager(answers.name, answers.id, answers.email, answers.officeNumber))
         }
-            fs.appendFile(outputPath,render(employees),(err) =>
-            err ? console.log(err) : console.log("This line ran at 74"));
+            fs.appendFile(outputPath, render(employees), (err) =>
+            err ? console.log(err) : console.log("Team member added!"));
     });
-    // .then((answers) => render(answers));
-            
 
-        // if (answers.ID == "0") {
-        //     console.log("inputs captured" + JSON.stringify(answers));
-        // }
-        // else {
-        //     return
-        // }
-    // });
 
 promptUser();
-
-
-    // .then((employees) => fs.writeFileSync('team.html', render(employees), "utf8")); 
-//     .then((employees) => {
-//         // fs.mkdirSync(OUTPUT_DIR)
-//         fs.appendFile(outputPath, render(employees), "utf8")
-// }); 
-    // .then(answers => render());
-    // .then(console.log(answers));
-
 
 
 
