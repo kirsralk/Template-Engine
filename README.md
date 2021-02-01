@@ -49,7 +49,7 @@ You are now ready to run the Team Template Engine application!
 
 ## Usage 
 
-* Invoke the application by running the "app.js" file within the Node environment (run the command "node index.js" in your terminal).
+* Invoke the application by running the "app.js" file within the Node environment (run the command "node app.js" in your terminal).
 
 * Answer the prompts with text inputs or by selecting items from the list provided
 
